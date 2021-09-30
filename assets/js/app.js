@@ -13,42 +13,43 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 const app = {
+  currentIndex: 0,
   songs: [
     {
       name: "Yêu Là Cưới",
       singer: "Phát Hồ",
       path: "./assets/music/song1.mp3",
-      images: "./assets/images/song1.jpg",
+      image: "./assets/images/song1.jpg",
     },
     {
       name: "Khuê Mộc Lang",
       singer: "Hương Ly, Jombie",
       path: "./assets/music/song2.mp3",
-      images: "./assets/images/song2.jpg",
+      image: "./assets/images/song2.jpg",
     },
     {
       name: "Lời Chia Tay Khó Nói",
       singer: "Chi Dân",
       path: "./assets/music/song3.mp3",
-      images: "./assets/images/song3.jpg",
+      image: "./assets/images/song3.jpg",
     },
     {
       name: "Cưới Thôi",
       singer: "Masew, Masiu",
       path: "./assets/music/song4.mp3",
-      images: "./assets/images/song4.jpg",
+      image: "./assets/images/song4.jpg",
     },
     {
       name: "Thê Lương",
       singer: "Phúc Chinh",
       path: "./assets/music/song5.mp3",
-      images: "./assets/images/song5.jpg",
+      image: "./assets/images/song5.jpg",
     },
     {
       name: "Độ Tộc 2",
       singer: "Masew",
       path: "./assets/music/song6.mp3",
-      images: "./assets/images/song6.jpg",
+      image: "./assets/images/song6.jpg",
     },
   ],
   render: function () {
@@ -70,6 +71,13 @@ const app = {
     });
     $(".playlist").innerHTML = htmls.join(" ");
   },
+  defineProperties: function () {
+    Object.defineProperty(this, "currentSong", {
+      get: function () {
+        return this.songs[this.currentIndex];
+      },
+    });
+  },
   handleEvents: function () {
     const cd = $(".cd");
     const cdWidth = cd.offsetWidth;
@@ -80,8 +88,22 @@ const app = {
       cd.style.opacity = newCdWidth / cdWidth;
     };
   },
+  loadCurrentSong: function () {
+    const heading = $("header h2");
+    const cdThumb = $(".cd-thumb");
+    const audio = $("#audio");
+    heading.textContent = this.currentSong.name;
+    cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
+    audio.src = this.currentSong.path;
+  },
   start: function () {
+    // Định nghĩa các thuộc tính cho object
+    this.defineProperties();
+    // Lắng nghe / xử lý các sự kiện (DOM events)
     this.handleEvents();
+    // Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
+    this.loadCurrentSong();
+    //Render playlist
     this.render();
   },
 };
