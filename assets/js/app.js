@@ -23,11 +23,12 @@ const playBtn = $(".btn-toggle-play");
 const player = $(".player");
 const progress = $("#progress");
 const randomBtn = $(".btn-random");
-
+const repeatBtn = $(".btn-repeat");
 const app = {
   currentIndex: 0,
   isPlaying: false,
   isRandom: false,
+  isRepeat: false,
   songs: [
     {
       name: "Yêu Là Cưới",
@@ -172,7 +173,16 @@ const app = {
     };
     // Xu ly next song khi audio ended
     audio.onended = function () {
-      nextBtn.click();
+      if (_this.isRepeat) {
+        audio.play();
+      } else {
+        nextBtn.click();
+      }
+    };
+    // Xu ly lap lai 1 song
+    repeatBtn.onclick = function () {
+      _this.isRepeat = !_this.isRepeat;
+      repeatBtn.classList.toggle("active", _this.isRepeat);
     };
   },
   loadCurrentSong: function () {
