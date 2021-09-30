@@ -157,8 +157,8 @@ const app = {
         _this.nextSong();
       }
       audio.play();
-
       _this.render();
+      _this.scrollToActiveSong();
     };
     prevBtn.onclick = function () {
       if (_this.isRandom) {
@@ -168,6 +168,7 @@ const app = {
       }
       audio.play();
       _this.render();
+      _this.scrollToActiveSong();
     };
     // Random
     randomBtn.onclick = function () {
@@ -187,6 +188,14 @@ const app = {
       _this.isRepeat = !_this.isRepeat;
       repeatBtn.classList.toggle("active", _this.isRepeat);
     };
+  },
+  scrollToActiveSong: function () {
+    setTimeout(() => {
+      $(".song.active").scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }, 200);
   },
   loadCurrentSong: function () {
     heading.textContent = this.currentSong.name;
