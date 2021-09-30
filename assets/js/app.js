@@ -165,9 +165,14 @@ const app = {
       }
       audio.play();
     };
+    // Random
     randomBtn.onclick = function () {
       _this.isRandom = !_this.isRandom;
       randomBtn.classList.toggle("active", _this.isRandom);
+    };
+    // Xu ly next song khi audio ended
+    audio.onended = function () {
+      nextBtn.click();
     };
   },
   loadCurrentSong: function () {
