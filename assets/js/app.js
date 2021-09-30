@@ -12,6 +12,9 @@
  */
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
+const heading = $("header h2");
+const cdThumb = $(".cd-thumb");
+const audio = $("#audio");
 const app = {
   currentIndex: 0,
   isPlaying: false,
@@ -58,7 +61,7 @@ const app = {
       return `
              <div class="song">
                 <div class="thumb"
-                    style="background-image: url('${song.images}')">
+                    style="background-image: url('${song.image}')">
                 </div>
                 <div class="body">
                     <h3 class="title">${song.name}</h3>
@@ -85,6 +88,20 @@ const app = {
     const cdWidth = cd.offsetWidth;
     const playBtn = $(".btn-toggle-play");
     const player = $(".player");
+    const progress = $("#progress");
+    // Xu ly CD quay / dung
+    const cdThumbAnimate = cdThumb.animate(
+      [
+        {
+          transform: "rotate(360deg)",
+        },
+      ],
+      {
+        duration: 10000,
+        iterations: Infinity,
+      }
+    );
+    cdThumbAnimate.pause();
     // Xử lý phóng to thu nhỏ CD
     document.onscroll = function () {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -103,18 +120,31 @@ const app = {
       audio.onplay = function () {
         _this.isPlaying = true;
         player.classList.add("playing");
+        cdThumbAnimate.play();
       };
       // Khi song duoc PAUSE
       audio.onpause = function () {
         _this.isPlaying = false;
         player.classList.remove("playing");
+        cdThumbAnimate.pause();
+      };
+      // Khi tiến độ bài hát thay đổi
+      audio.ontimeupdate = function () {
+        if (audio.duration) {
+          const progressPercent = Math.floor(
+            (audio.currentTime / audio.duration) * 100
+          );
+          progress.value = progressPercent;
+        }
+      };
+      // Xu ly khi tua song
+      progress.onchange = function (e) {
+        const seekTime = (audio.duration / 100) * e.target.value;
+        audio.currentTime = seekTime;
       };
     };
   },
   loadCurrentSong: function () {
-    const heading = $("header h2");
-    const cdThumb = $(".cd-thumb");
-    const audio = $("#audio");
     heading.textContent = this.currentSong.name;
     cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
     audio.src = this.currentSong.path;
