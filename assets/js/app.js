@@ -15,6 +15,14 @@ const $$ = document.querySelectorAll.bind(document);
 const heading = $("header h2");
 const cdThumb = $(".cd-thumb");
 const audio = $("#audio");
+const prevBtn = $(".btn-prev");
+const nextBtn = $(".btn-next");
+const cd = $(".cd");
+const cdWidth = cd.offsetWidth;
+const playBtn = $(".btn-toggle-play");
+const player = $(".player");
+const progress = $("#progress");
+
 const app = {
   currentIndex: 0,
   isPlaying: false,
@@ -84,11 +92,7 @@ const app = {
   },
   handleEvents: function () {
     let _this = this;
-    const cd = $(".cd");
-    const cdWidth = cd.offsetWidth;
-    const playBtn = $(".btn-toggle-play");
-    const player = $(".player");
-    const progress = $("#progress");
+
     // Xu ly CD quay / dung
     const cdThumbAnimate = cdThumb.animate(
       [
@@ -143,11 +147,33 @@ const app = {
         audio.currentTime = seekTime;
       };
     };
+    nextBtn.onclick = function () {
+      _this.nextSong();
+      audio.play();
+    };
+    prevBtn.onclick = function () {
+      _this.prevSong();
+      audio.play();
+    };
   },
   loadCurrentSong: function () {
     heading.textContent = this.currentSong.name;
     cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`;
     audio.src = this.currentSong.path;
+  },
+  nextSong: function () {
+    this.currentIndex++;
+    if (this.currentIndex >= this.songs.length) {
+      this.currentIndex = 0;
+    }
+    this.loadCurrentSong();
+  },
+  prevSong: function () {
+    this.currentIndex--;
+    if (this.currentIndex < 0) {
+      this.currentIndex = this.songs.length - 1;
+    }
+    this.loadCurrentSong();
   },
   start: function () {
     // Định nghĩa các thuộc tính cho object
