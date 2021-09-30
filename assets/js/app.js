@@ -22,10 +22,12 @@ const cdWidth = cd.offsetWidth;
 const playBtn = $(".btn-toggle-play");
 const player = $(".player");
 const progress = $("#progress");
+const randomBtn = $(".btn-random");
 
 const app = {
   currentIndex: 0,
   isPlaying: false,
+  isRandom: false,
   songs: [
     {
       name: "Yêu Là Cưới",
@@ -148,12 +150,24 @@ const app = {
       };
     };
     nextBtn.onclick = function () {
-      _this.nextSong();
+      if (_this.isRandom) {
+        _this.randomSong();
+      } else {
+        _this.nextSong();
+      }
       audio.play();
     };
     prevBtn.onclick = function () {
-      _this.prevSong();
+      if (_this.isRandom) {
+        _this.randomSong();
+      } else {
+        _this.prevSong();
+      }
       audio.play();
+    };
+    randomBtn.onclick = function () {
+      _this.isRandom = !_this.isRandom;
+      randomBtn.classList.toggle("active", _this.isRandom);
     };
   },
   loadCurrentSong: function () {
@@ -173,6 +187,14 @@ const app = {
     if (this.currentIndex < 0) {
       this.currentIndex = this.songs.length - 1;
     }
+    this.loadCurrentSong();
+  },
+  randomSong: function () {
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * this.songs.length);
+    } while (newIndex === this.currentIndex);
+    this.currentIndex = newIndex;
     this.loadCurrentSong();
   },
   start: function () {
