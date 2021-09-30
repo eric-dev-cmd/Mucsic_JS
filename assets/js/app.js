@@ -14,6 +14,7 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 const app = {
   currentIndex: 0,
+  isPlaying: false,
   songs: [
     {
       name: "Yêu Là Cưới",
@@ -79,13 +80,35 @@ const app = {
     });
   },
   handleEvents: function () {
+    let _this = this;
     const cd = $(".cd");
     const cdWidth = cd.offsetWidth;
+    const playBtn = $(".btn-toggle-play");
+    const player = $(".player");
+    // Xử lý phóng to thu nhỏ CD
     document.onscroll = function () {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
       const newCdWidth = cdWidth - scrollTop;
       cd.style.width = newCdWidth > 0 ? newCdWidth + "px" : 0;
       cd.style.opacity = newCdWidth / cdWidth;
+    };
+    // Xử lý khi click playing
+    playBtn.onclick = function () {
+      if (_this.isPlaying) {
+        audio.pause();
+      } else {
+        audio.play();
+      }
+      // Khi song duoc PLAY
+      audio.onplay = function () {
+        _this.isPlaying = true;
+        player.classList.add("playing");
+      };
+      // Khi song duoc PAUSE
+      audio.onpause = function () {
+        _this.isPlaying = false;
+        player.classList.remove("playing");
+      };
     };
   },
   loadCurrentSong: function () {
