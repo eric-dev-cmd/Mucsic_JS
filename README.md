@@ -1,6 +1,6 @@
 # Mucsic_JS
 - Music player app
 # Screenshots
-<img src="https://ibb.co/3p7rXN2" />
+![alt text](https://github.com/zunggzing/Mucsic_JS/edit/master/MusicImage.PNG?raw=true)
 # License
 - © Copyright by Trần Trung Vinh
